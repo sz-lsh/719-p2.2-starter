@@ -53,7 +53,7 @@ def safe_log(x):
         x = 1e-15
     return math.log(x)
 
-# compute the
+# compute the gradient descent updates and cross-entropy loss for an RDD partition
 def gd_partition(samples):
     local_updates = defaultdict(float)
     local_weights_array = weights_array_bc.value
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     # the RDD that contains parsed data samples, which are reused during training
     samples_rdd = text_rdd.map(parse_line, preservesPartitioning=True)\
                  .persist(pyspark.storagelevel.StorageLevel.MEMORY_AND_DISK)
-    # force the samples_rdd to be created
+    # force samples_rdd to be created
     num_samples = samples_rdd.count()
     # initialize weights as a local array
     weights_array = np.ones(num_features) * weight_init_value
