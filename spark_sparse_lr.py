@@ -25,14 +25,13 @@ import scipy.sparse as sps
 import string
 from collections import defaultdict
 
-# parse a line of the trainig data file to produce a data sample record
+# parse a line of the training data file to produce a data sample record
 def parse_line(line):
     parts = line.split()
     label = int(parts[0])
     # the program requires binary labels in {0, 1}
     # the dataset may have binary labels -1 and 1, we convert all -1 to 0
     label = 0 if label == -1 else label
-    idx = 1
     feature_ids = []
     feature_vals = []
     for part in parts[1:]:
@@ -46,7 +45,7 @@ def parse_line(line):
 def sigmoid(x):
     return 1 / (1 + math.exp(-x))
 
-# compute logrithm of a number but thresholding the number to avoid logrithm of
+# compute logarithm of a number but thresholding the number to avoid logarithm of
 # 0
 def safe_log(x):
     if x < 1e-15:
@@ -67,7 +66,7 @@ def gd_partition(samples):
         feature_vals = features[1]
         # fetch the relevant weights for this sample as a numpy array
         local_weights = np.take(local_weights_array, feature_ids)
-        # given the current weights, the probablility of this sample belonging to
+        # given the current weights, the probability of this sample belonging to
         # class '1'
         pred = sigmoid(feature_vals.dot(local_weights))
         diff = label - pred
@@ -107,7 +106,7 @@ if __name__ == "__main__":
 
     # total number of cores of your Spark slaves
     num_cores = 64
-    # for simplicity, the number of partitons is hardcoded
+    # for simplicity, the number of partitions is hardcoded
     # the number of partitions should be configured based on data size
     # and number of cores in your cluster
     num_partitions = num_cores * 4
